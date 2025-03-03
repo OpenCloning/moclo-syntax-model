@@ -32,6 +32,7 @@ autopep8 = "^2.3.2"
 flake8-bugbear = "^24.12.12"
 black = "^25.1.0"
 pre-commit = "^4.1.0"
+linkml-runtime = "^1.8.3"
 
 [tool.black]
 line-length = 119

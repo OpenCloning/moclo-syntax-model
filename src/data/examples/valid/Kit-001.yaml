@@ -1,6 +1,83 @@
 # Example for a valid data object
 ---
-id: "001"
-name: foo bar
-primary_email: foo.bar@example.com
-age_in_years: 33
+name: example kit
+description: an example kit
+syntax:
+  - name: example syntax
+    description: an example syntax
+    overhangs:
+      - GGAG
+      - TACT
+      - CCAT
+      - AATG
+      - AGGT
+      - TTCG
+      - GCTT
+      - GGTA
+      - CGCT
+part_definitions:
+  - name: promoter
+    description: a promoter
+    color: "#d4dab3"
+    left_overhang: GGAG
+    right_overhang: TACT
+    feature_type: promoter
+  - name: rbs
+    description: a ribosome binding site
+    color: "#f1bd94"
+    left_overhang: TACT
+    right_overhang: AATG
+    feature_type: rbs
+  - name: rbs-nterm
+    description: a ribosome binding site for an assembly that uses n-term tagging part
+    color: "#f1bd94"
+    left_overhang: TACT
+    right_overhang: CCAT
+    feature_type: rbs
+
+  - name: n-tag
+    description: an N-terminal tag
+    color: "#9ecae1"
+    left_overhang: CCAT
+    right_overhang: AATG
+    feature_type: tag
+  - name: n-tag2
+    description: a second N-terminal tag
+    color: "#fff176"
+    left_overhang: AATG
+    right_overhang: AGGT
+    feature_type: tag
+
+  - name: 2n-tagged-cds
+    description: a coding sequence with 2 N-terminal tag
+    color: "#d3d3d3"
+    left_overhang: AGGT
+    right_overhang: GCTT
+    feature_type: cds
+
+  - name: cds
+    description: coding sequence
+    color: "#d3d3d3"
+    left_overhang: GCTT
+    right_overhang: GGTA
+    feature_type: cds
+
+
+  - name: c-tag
+    description: a C-terminal tag
+    color: "#f4a4a6"
+    left_overhang: TTCG
+    right_overhang: GCTT
+    feature_type: tag
+  - name: c-tag2
+    description: a second C-terminal tag
+    color: "#f7c6c7"
+    left_overhang: GCTT
+    right_overhang: GGTA
+    feature_type: tag
+  - name: terminator
+    description: a terminator
+    color: "#c3b3d4"
+    left_overhang: GGTA
+    right_overhang: CGCT
+    feature_type: terminator

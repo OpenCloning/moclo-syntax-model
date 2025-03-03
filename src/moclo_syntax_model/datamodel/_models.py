@@ -47,7 +47,7 @@ linkml_meta = LinkMLMeta(
     {
         "default_prefix": "moclo_syntax_model",
         "default_range": "string",
-        "description": "cruft create " "https://github.com/linkml/linkml-project-cookiecutter",
+        "description": "A LinkML model to describe MoClo syntax",
         "id": "https://w3id.org/OpenCloning/moclo-syntax-model",
         "imports": ["linkml:types"],
         "license": "MIT",
@@ -65,135 +65,205 @@ linkml_meta = LinkMLMeta(
         },
         "see_also": ["https://OpenCloning.github.io/moclo-syntax-model"],
         "source_file": "src/moclo_syntax_model/schema/moclo_syntax_model.yaml",
-        "title": "moclo-syntax-model",
+        "title": "MoClo Syntax Model",
+        "types": {
+            "Color": {
+                "description": "A hex color code",
+                "from_schema": "https://w3id.org/OpenCloning/moclo-syntax-model",
+                "name": "Color",
+                "pattern": "^#([0-9a-fA-F]{6})$",
+                "typeof": "string",
+            },
+            "Overhang": {
+                "description": "A string of DNA representing an " "overhang",
+                "from_schema": "https://w3id.org/OpenCloning/moclo-syntax-model",
+                "name": "Overhang",
+                "pattern": "^[ACGT]{4}$",
+                "typeof": "string",
+            },
+        },
     }
 )
 
 
-class PersonStatus(str, Enum):
-    # the person is living
-    ALIVE = "ALIVE"
-    # the person is deceased
-    DEAD = "DEAD"
-    # the vital status is not known
-    UNKNOWN = "UNKNOWN"
+class FeatureType(str, Enum):
+    # A coding sequence
+    CDS = "CDS"
+    # A promoter
+    promoter = "promoter"
+    # A terminator
+    terminator = "terminator"
+    # A ribosome binding site
+    rbs = "rbs"
+    # A miscellaneous feature
+    misc_feature = "misc_feature"
 
 
-class NamedThing(ConfiguredBaseModel):
+class PartDefinition(ConfiguredBaseModel):
     """
-    A generic grouping for any identifiable entity
+    A definition of a part
     """
 
-    linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta(
-        {"class_uri": "schema:Thing", "from_schema": "https://w3id.org/OpenCloning/moclo-syntax-model"}
-    )
+    linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({"from_schema": "https://w3id.org/OpenCloning/moclo-syntax-model"})
 
     id: str = Field(
         default=...,
         description="""A unique identifier for a thing""",
         json_schema_extra={
-            "linkml_meta": {"alias": "id", "domain_of": ["NamedThing"], "slot_uri": "schema:identifier"}
+            "linkml_meta": {"alias": "id", "domain_of": ["PartDefinition"], "slot_uri": "schema:identifier"}
         },
     )
     name: Optional[str] = Field(
         default=None,
         description="""A human-readable name for a thing""",
-        json_schema_extra={"linkml_meta": {"alias": "name", "domain_of": ["NamedThing"], "slot_uri": "schema:name"}},
+        json_schema_extra={
+            "linkml_meta": {
+                "alias": "name",
+                "domain_of": ["PartDefinition", "Syntax", "Assembly", "Kit"],
+                "slot_uri": "schema:name",
+            }
+        },
     )
     description: Optional[str] = Field(
         default=None,
         description="""A human-readable description for a thing""",
         json_schema_extra={
-            "linkml_meta": {"alias": "description", "domain_of": ["NamedThing"], "slot_uri": "schema:description"}
+            "linkml_meta": {
+                "alias": "description",
+                "domain_of": ["PartDefinition", "Syntax", "Assembly", "Kit"],
+                "slot_uri": "schema:description",
+            }
+        },
+    )
+    color: Optional[str] = Field(
+        default=None,
+        json_schema_extra={
+            "linkml_meta": {"alias": "color", "domain_of": ["PartDefinition"], "id_prefixes": ["Color"]}
+        },
+    )
+    left_overhang: Optional[str] = Field(
+        default=None,
+        json_schema_extra={
+            "linkml_meta": {"alias": "left_overhang", "domain_of": ["PartDefinition"], "id_prefixes": ["Overhang"]}
+        },
+    )
+    right_overhang: Optional[str] = Field(
+        default=None,
+        json_schema_extra={
+            "linkml_meta": {"alias": "right_overhang", "domain_of": ["PartDefinition"], "id_prefixes": ["Overhang"]}
         },
     )
 
 
-class Kit(NamedThing):
+class Syntax(ConfiguredBaseModel):
     """
-    Represents a Kit
+    A syntax for a MoClo method
     """
 
-    linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta(
-        {
-            "from_schema": "https://w3id.org/OpenCloning/moclo-syntax-model",
-            "slot_usage": {"primary_email": {"name": "primary_email", "pattern": "^\\S+@[\\S+\\.]+\\S+"}},
-        }
-    )
+    linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({"from_schema": "https://w3id.org/OpenCloning/moclo-syntax-model"})
 
-    primary_email: Optional[str] = Field(
-        default=None,
-        description="""The main email address of a person""",
-        json_schema_extra={
-            "linkml_meta": {"alias": "primary_email", "domain_of": ["Kit"], "slot_uri": "schema:email"}
-        },
-    )
-    birth_date: Optional[date] = Field(
-        default=None,
-        description="""Date on which a person is born""",
-        json_schema_extra={
-            "linkml_meta": {"alias": "birth_date", "domain_of": ["Kit"], "slot_uri": "schema:birthDate"}
-        },
-    )
-    age_in_years: Optional[int] = Field(
-        default=None,
-        description="""Number of years since birth""",
-        json_schema_extra={"linkml_meta": {"alias": "age_in_years", "domain_of": ["Kit"]}},
-    )
-    vital_status: Optional[PersonStatus] = Field(
-        default=None,
-        description="""living or dead status""",
-        json_schema_extra={"linkml_meta": {"alias": "vital_status", "domain_of": ["Kit"]}},
-    )
-    id: str = Field(
-        default=...,
-        description="""A unique identifier for a thing""",
-        json_schema_extra={
-            "linkml_meta": {"alias": "id", "domain_of": ["NamedThing"], "slot_uri": "schema:identifier"}
-        },
-    )
     name: Optional[str] = Field(
         default=None,
         description="""A human-readable name for a thing""",
-        json_schema_extra={"linkml_meta": {"alias": "name", "domain_of": ["NamedThing"], "slot_uri": "schema:name"}},
+        json_schema_extra={
+            "linkml_meta": {
+                "alias": "name",
+                "domain_of": ["PartDefinition", "Syntax", "Assembly", "Kit"],
+                "slot_uri": "schema:name",
+            }
+        },
     )
     description: Optional[str] = Field(
         default=None,
         description="""A human-readable description for a thing""",
         json_schema_extra={
-            "linkml_meta": {"alias": "description", "domain_of": ["NamedThing"], "slot_uri": "schema:description"}
+            "linkml_meta": {
+                "alias": "description",
+                "domain_of": ["PartDefinition", "Syntax", "Assembly", "Kit"],
+                "slot_uri": "schema:description",
+            }
         },
     )
-
-    @field_validator("primary_email")
-    def pattern_primary_email(cls, v):
-        pattern = re.compile(r"^\S+@[\S+\.]+\S+")
-        if isinstance(v, list):
-            for element in v:
-                if isinstance(v, str) and not pattern.match(element):
-                    raise ValueError(f"Invalid primary_email format: {element}")
-        elif isinstance(v, str):
-            if not pattern.match(v):
-                raise ValueError(f"Invalid primary_email format: {v}")
-        return v
-
-
-class KitCollection(ConfiguredBaseModel):
-    """
-    A holder for Kit objects
-    """
-
-    linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta(
-        {"from_schema": "https://w3id.org/OpenCloning/moclo-syntax-model", "tree_root": True}
+    overhangs: List[str] = Field(
+        default=..., json_schema_extra={"linkml_meta": {"alias": "overhangs", "domain_of": ["Syntax"]}}
     )
 
-    entries: Optional[Dict[str, Kit]] = Field(
-        default=None, json_schema_extra={"linkml_meta": {"alias": "entries", "domain_of": ["KitCollection"]}}
+
+class Assembly(ConfiguredBaseModel):
+    """
+    An assembly of a MoClo method
+    """
+
+    linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({"from_schema": "https://w3id.org/OpenCloning/moclo-syntax-model"})
+
+    name: Optional[str] = Field(
+        default=None,
+        description="""A human-readable name for a thing""",
+        json_schema_extra={
+            "linkml_meta": {
+                "alias": "name",
+                "domain_of": ["PartDefinition", "Syntax", "Assembly", "Kit"],
+                "slot_uri": "schema:name",
+            }
+        },
+    )
+    description: Optional[str] = Field(
+        default=None,
+        description="""A human-readable description for a thing""",
+        json_schema_extra={
+            "linkml_meta": {
+                "alias": "description",
+                "domain_of": ["PartDefinition", "Syntax", "Assembly", "Kit"],
+                "slot_uri": "schema:description",
+            }
+        },
+    )
+    parts: List[str] = Field(
+        default=..., json_schema_extra={"linkml_meta": {"alias": "parts", "domain_of": ["Assembly"]}}
+    )
+
+
+class Kit(ConfiguredBaseModel):
+    """
+    A kit for a MoClo method
+    """
+
+    linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({"from_schema": "https://w3id.org/OpenCloning/moclo-syntax-model"})
+
+    name: Optional[str] = Field(
+        default=None,
+        description="""A human-readable name for a thing""",
+        json_schema_extra={
+            "linkml_meta": {
+                "alias": "name",
+                "domain_of": ["PartDefinition", "Syntax", "Assembly", "Kit"],
+                "slot_uri": "schema:name",
+            }
+        },
+    )
+    description: Optional[str] = Field(
+        default=None,
+        description="""A human-readable description for a thing""",
+        json_schema_extra={
+            "linkml_meta": {
+                "alias": "description",
+                "domain_of": ["PartDefinition", "Syntax", "Assembly", "Kit"],
+                "slot_uri": "schema:description",
+            }
+        },
+    )
+    assemblies: List[Assembly] = Field(
+        default=..., json_schema_extra={"linkml_meta": {"alias": "assemblies", "domain_of": ["Kit"]}}
+    )
+    syntax: Syntax = Field(default=..., json_schema_extra={"linkml_meta": {"alias": "syntax", "domain_of": ["Kit"]}})
+    part_definitions: List[PartDefinition] = Field(
+        default=..., json_schema_extra={"linkml_meta": {"alias": "part_definitions", "domain_of": ["Kit"]}}
     )
 
 
 # Model rebuild
 # see https://pydantic-docs.helpmanual.io/usage/models/#rebuilding-a-model
-NamedThing.model_rebuild()
+PartDefinition.model_rebuild()
+Syntax.model_rebuild()
+Assembly.model_rebuild()
 Kit.model_rebuild()
-KitCollection.model_rebuild()
