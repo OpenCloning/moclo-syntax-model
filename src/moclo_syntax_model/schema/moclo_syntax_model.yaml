@@ -38,7 +38,6 @@ classes:
     description: A definition of a part
     slots:
       - id
-      - name
       - description
     attributes:
       - color: Color
@@ -108,7 +107,7 @@ slots:
 enums:
   FeatureType:
     permissible_values:
-      CDS:
+      cds:
         description: A coding sequence
       promoter:
         description: A promoter

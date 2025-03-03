@@ -1,0 +1,14 @@
+id,description,color,left_overhang,right_overhang,feature_type
+promoter,a promoter,#d4dab3,GGAG,TACT,promoter
+rbs,a ribosome binding site,#f1bd94,TACT,AATG,rbs
+rbs-nterm,a ribosome binding site for assembly using n-tag,#f1bd94,TACT,CCAT,rbs
+n-tag,an N-terminal tag,#9ecae1,CCAT,AATG,cds
+n-tag2,a second N-terminal tag,#fff176,AATG,AGGT,cds
+cds-with-n-tag2,a coding sequence with 2 N-terminal tag,#d3d3d3,AGGT,GCTT,cds
+cds,main CDS,#d3d3d3,AATG,GCTT,cds
+c-tag,a C-terminal tag,#f4a4a6,TTCG,GCTT,cds
+c-tag2,a second C-terminal tag,#f7c6c7,GCTT,GGTA,cds
+terminator,a terminator,#c3b3d4,GCTT,CGCT,terminator
+cds-with-c-tag,a CDS with a c-terminal tag,#d3d3d3,AATG,TTCG,cds
+terminator-with-c-tag2,a terminator with a c-tag2,#c3b3d4,GGTA,CGCT,terminator
+cds-with-n-tag2-and-c-tag,a CDS with n-tag2 and c-tag,#d3d3d3,AGGT,TTCG,cds

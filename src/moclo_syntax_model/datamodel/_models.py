@@ -88,7 +88,7 @@ linkml_meta = LinkMLMeta(
 
 class FeatureType(str, Enum):
     # A coding sequence
-    CDS = "CDS"
+    cds = "cds"
     # A promoter
     promoter = "promoter"
     # A terminator
@@ -111,17 +111,6 @@ class PartDefinition(ConfiguredBaseModel):
         description="""A unique identifier for a thing""",
         json_schema_extra={
             "linkml_meta": {"alias": "id", "domain_of": ["PartDefinition"], "slot_uri": "schema:identifier"}
-        },
-    )
-    name: Optional[str] = Field(
-        default=None,
-        description="""A human-readable name for a thing""",
-        json_schema_extra={
-            "linkml_meta": {
-                "alias": "name",
-                "domain_of": ["PartDefinition", "Syntax", "Assembly", "Kit"],
-                "slot_uri": "schema:name",
-            }
         },
     )
     description: Optional[str] = Field(
@@ -153,6 +142,12 @@ class PartDefinition(ConfiguredBaseModel):
             "linkml_meta": {"alias": "right_overhang", "domain_of": ["PartDefinition"], "id_prefixes": ["Overhang"]}
         },
     )
+    feature_type: Optional[str] = Field(
+        default=None,
+        json_schema_extra={
+            "linkml_meta": {"alias": "feature_type", "domain_of": ["PartDefinition"], "id_prefixes": ["FeatureType"]}
+        },
+    )
 
 
 class Syntax(ConfiguredBaseModel):
@@ -166,11 +161,7 @@ class Syntax(ConfiguredBaseModel):
         default=None,
         description="""A human-readable name for a thing""",
         json_schema_extra={
-            "linkml_meta": {
-                "alias": "name",
-                "domain_of": ["PartDefinition", "Syntax", "Assembly", "Kit"],
-                "slot_uri": "schema:name",
-            }
+            "linkml_meta": {"alias": "name", "domain_of": ["Syntax", "Assembly", "Kit"], "slot_uri": "schema:name"}
         },
     )
     description: Optional[str] = Field(
@@ -200,11 +191,7 @@ class Assembly(ConfiguredBaseModel):
         default=None,
         description="""A human-readable name for a thing""",
         json_schema_extra={
-            "linkml_meta": {
-                "alias": "name",
-                "domain_of": ["PartDefinition", "Syntax", "Assembly", "Kit"],
-                "slot_uri": "schema:name",
-            }
+            "linkml_meta": {"alias": "name", "domain_of": ["Syntax", "Assembly", "Kit"], "slot_uri": "schema:name"}
         },
     )
     description: Optional[str] = Field(
@@ -234,11 +221,7 @@ class Kit(ConfiguredBaseModel):
         default=None,
         description="""A human-readable name for a thing""",
         json_schema_extra={
-            "linkml_meta": {
-                "alias": "name",
-                "domain_of": ["PartDefinition", "Syntax", "Assembly", "Kit"],
-                "slot_uri": "schema:name",
-            }
+            "linkml_meta": {"alias": "name", "domain_of": ["Syntax", "Assembly", "Kit"], "slot_uri": "schema:name"}
         },
     )
     description: Optional[str] = Field(
